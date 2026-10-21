@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const $=id=>document.getElementById(id);
-const RICH_HEADER='ESC_RICH_V1\\n';
+const RICH_HEADER='ESC_RICH_V1\n';
 const swatches={yellow:'#fde58a',red:'#f9b0b8',blue:'#a9d5ff',green:'#b7e8bb',pink:'#f2b7df'};
 const safeColors=new Map();
 for(const hex of Object.values(swatches)){const t=document.createElement('span');t.style.backgroundColor=hex;safeColors.set(t.style.backgroundColor.toLowerCase(),hex);safeColors.set(hex,hex)}
@@ -8,7 +8,7 @@ function sanitizeMarkup(input){
  const doc=new DOMParser().parseFromString('<div>'+input+'</div>','text/html'),out=document.createElement('div');
  function recur(src,dst){for(const n of src.childNodes){if(n.nodeType===3){dst.appendChild(document.createTextNode(n.textContent));continue}if(n.nodeType!==1)continue;const tag=n.tagName.toLowerCase();if(['script','style','svg','iframe','object','template'].includes(tag))continue;const el=document.createElement(['b','strong','br','div','p','span'].includes(tag)?tag:'span');if(tag==='span'&&safeColors.has(n.style.backgroundColor.toLowerCase()))el.style.backgroundColor=safeColors.get(n.style.backgroundColor.toLowerCase());if(tag!=='br')recur(n,el);dst.appendChild(el)}}recur(doc.body.firstElementChild,out);return out.innerHTML
 }
-function plainEditor(){return $('script-body').innerText.replace(/\\r/g,'').replace(/\\n$/,'')}
+function plainEditor(){return $('script-body').innerText.replace(/\r/g,'').replace(/\n$/,'')}
 function readEditor(){const html=sanitizeMarkup($('script-body').innerHTML);const temp=document.createElement('div');temp.innerHTML=html;return temp.querySelector('b,strong,span[style*="background-color"]')?RICH_HEADER+html:plainEditor()}
 function writeEditor(v){$('script-body').innerHTML=String(v||'').startsWith(RICH_HEADER)?sanitizeMarkup(v.slice(RICH_HEADER.length)):'';if(!String(v||'').startsWith(RICH_HEADER))$('script-body').textContent=v||'';resizePaper()}
 function selectedText(){const s=window.getSelection();return !!(s&&s.rangeCount&&!s.isCollapsed&&$('script-body').contains(s.anchorNode)&&$('script-body').contains(s.focusNode))}
