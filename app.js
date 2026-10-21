@@ -60,10 +60,10 @@ const workspace=$('workspace'),readingArea=$('reading-area');
 /* Extract chapter headings from the existing contenteditable DOM, without modifying the script. */
 let outlineMode=false,outlineEntries=[],outlineTimer=null;
 function isChapterHeading(line){
- const s=line.trim().replace(/^\\*\\*(.*?)\\*\\*$/, '$1').trim();
+ const s=line.trim().replace(/^\*\*(.*?)\*\*$/, '$1').trim();
  if(!s||s.length>110)return null;
- const marker=/^(?:\\s*#{1,6}\\s*|\\s*\\*{1,3}\\s+|\\s*\\d{1,2}(?:\\.\\d{1,2}){0,2}[.):-]\\s*|\\s*cap[ií]tulo\\s*(?:\\d{1,2}|[ivx]+)\\b[\\s.:-]*)/i;
- const named=/^(?:introdu[çc][aã]o|conclus[aã]o|encerramento|considera[çc][õo]es finais|abertura)(?:\\s*[—–:.-]\\s*.*)?$/i;
+ const marker=/^(?:\s*#{1,6}\s*|\s*\*{1,3}\s+|\s*\d{1,2}(?:\.\d{1,2}){0,2}[.):-]\s*|\s*cap[ií]tulo\s*(?:\d{1,2}|[ivx]+)\b[\s.:-]*)/i;
+ const named=/^(?:introdu[çc][aã]o|conclus[aã]o|encerramento|considera[çc][õo]es finais|abertura)(?:\s*[—–:.-]\s*.*)?$/i;
  const found=s.match(marker);
  if(found){const label=s.replace(marker,'').trim();return label?s:null}
  return named.test(s)?s:null;
@@ -72,7 +72,7 @@ function linesWithAnchors(){
  const editor=$('script-body'),lines=[],walker=document.createTreeWalker(editor,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT),blocks=new Set(['DIV','P','H1','H2','H3','H4','H5','H6','LI']);
  let line='',anchor=null,node;
  function finish(){if(line.trim())lines.push({label:line.trim(),anchor});line='';anchor=null}
- function addText(text,n){for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='\\n'){finish();continue}if(!anchor&&!/\\s/.test(ch))anchor={node:n,offset:i};line+=ch}}
+ function addText(text,n){for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='\n'){finish();continue}if(!anchor&&!/\s/.test(ch))anchor={node:n,offset:i};line+=ch}}
  while((node=walker.nextNode())){
   if(node.nodeType===Node.TEXT_NODE){addText(node.textContent,node);continue}
   if(node.nodeType===Node.ELEMENT_NODE){
