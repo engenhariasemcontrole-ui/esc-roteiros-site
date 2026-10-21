@@ -20,7 +20,7 @@ $('bold-selection').onclick=()=>applyFormat('bold');
 $('highlight-toggle').addEventListener('pointerdown',e=>e.preventDefault());
 $('highlight-toggle').onclick=()=>{trackSelection();$('highlight-palette').classList.toggle('hidden')};
 document.querySelectorAll('[data-color]').forEach(btn=>{btn.addEventListener('pointerdown',e=>e.preventDefault());btn.onclick=()=>{applyFormat('hiliteColor',swatches[btn.dataset.color]||'#f2e8d5');$('highlight-palette').classList.add('hidden')}});
-$('script-body').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='b'){e.preventDefault();document.execCommand('bold');dirty=true;countWords();resizePaper()}});
+$('script-body').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='b'){e.preventDefault();document.execCommand('styleWithCSS',false,'false');document.execCommand('bold');dirty=true;countWords();resizePaper()}});
 $('script-body').addEventListener('paste',e=>{e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'))});
 document.addEventListener('selectionchange',trackSelection);
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('.highlighter'))$('highlight-palette').classList.add('hidden')});
