@@ -30,7 +30,7 @@ const show=(id)=>['setup','login','workspace'].forEach(x=>$(x).classList.toggle(
 const toast=(message,isError=false)=>{const t=$('toast');t.textContent=message;t.className=isError?'error':'ok';setTimeout(()=>t.className='',4500)};
 const err=e=>toast(e?.message||String(e),true);
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function config(){try{return JSON.parse(localStorage.getItem('esc-config')||'null')}catch{return null}}
+function config(){return {url:'https://kweldyweqihgzhcykbwa.supabase.co',key:'sb_publishable_O9p-wvFPISfR8Xupi8T_GA_SzL19LS0'}}
 async function start(){const c=config();if(!c){show('setup');return}try{db=createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}); const {data,error}=await db.auth.getUser();if(error&& !/session missing/i.test(error.message))throw error;user=data?.user||null;if(user)await load();else show('login')}catch(e){err(e);show('login')}}
 $('save-config').onclick=async()=>{const url=$('project-url').value.trim().replace(/\/$/,'');const key=$('anon-key').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){toast('Informe uma URL de projeto Supabase válida e a chave publishable/anon.',true);return}if(key.startsWith('sb_secret_')){toast('Não utilize uma chave secreta!',true);return}localStorage.setItem('esc-config',JSON.stringify({url,key}));await start()};
 $('change-config').onclick=()=>{if(confirm('Alterar a configuração do Supabase neste navegador?')){localStorage.removeItem('esc-config');location.reload()}};
