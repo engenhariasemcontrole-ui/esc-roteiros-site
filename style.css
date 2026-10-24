@@ -32,3 +32,9 @@ body.reading-scrolled #reading-area{padding-top:0}
 .outline-item:hover,.outline-item:focus-visible{background:#243654;border-color:#4a658a}
 .outline-item .outline-num{display:block;font-size:10px;color:#98abc9;margin-bottom:3px}
 #outline-back{font-size:12px;padding:7px 9px}
+
+/* Formatting remains in the existing sticky reading toolbar */
+.reader-format-tools{display:inline-flex;align-items:center;gap:8px;margin-left:auto}
+.reader-controls{overflow:visible}
+.reader-controls .highlight-palette{z-index:100}
+@media(max-width:750px){.reader-format-tools{margin-left:0}.reader-controls{flex-wrap:wrap}.reader-controls .highlight-palette{right:0;left:auto}}
